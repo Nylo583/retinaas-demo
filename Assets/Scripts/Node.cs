@@ -20,6 +20,12 @@ public class Node : MonoBehaviour
         StartCoroutine(UpdateLineFlowing());
     }
 
+    void ClearSegments() {
+        foreach (Transform t in transform) {
+            Destroy(t.gameObject);
+        }
+    }
+
     void DrawSegment() {
         float cPercent = Mathf.Min(magnitudeForColor, 30) / 30;
         Color color = Color.Lerp(Color.blue, Color.red, cPercent);
@@ -55,7 +61,10 @@ public class Node : MonoBehaviour
         }
     }
 
-    IEnumerator UpdateLineFlowing() {
+    public IEnumerator UpdateLineFlowing() {
+        currentPos = this.transform.position;
+        ClearSegments();
+
         NodeSpawner ns = GameObject.Find("NodeContainer").GetComponent<NodeSpawner>();
         //Debug.Log(VectorWithin(currentPos, ns.minBounds, ns.maxBounds));
         while (VectorWithin(currentPos, ns.minBounds, ns.maxBounds) && Physics.OverlapSphere(currentPos, .1f).Length == 0) {

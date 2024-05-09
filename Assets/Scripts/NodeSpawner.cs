@@ -53,4 +53,20 @@ public class NodeSpawner : MonoBehaviour
             Gizmos.DrawWireSphere(pos, .1f);
         }
     }
+
+    private void Update() {
+
+        if (Input.GetKeyDown(KeyCode.R)) {
+            Random.InitState(System.DateTime.Now.Millisecond);
+            GameObject sc = GameObject.Find("SensorContainer");
+
+            foreach (Transform t in sc.transform) {
+                t.gameObject.GetComponent<Sensor>().sensorDirection = (new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), Random.Range(-10, 10))).normalized;
+            }
+
+            foreach (Transform t in GameObject.Find("NodeContainer").transform) {
+                StartCoroutine(t.gameObject.GetComponent<Node>().UpdateLineFlowing());
+            }
+        }
+    }
 }
